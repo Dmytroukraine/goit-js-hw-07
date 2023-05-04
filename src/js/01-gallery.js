@@ -35,11 +35,15 @@ function onGalleryClick(event) {
   const imageUrl = event.target.dataset.source;
 
   const instance = basicLightbox.create(`
-  <img src="${imageUrl}" width="800" height="600">
+    <img src="${imageUrl}" width="800" height="600">
 `);
 
-
   instance.show();
+
+  const image = instance.element().querySelector('img');
+  image.onload = () => {
+    image.classList.add('opening');
+  };
 
   document.addEventListener('keydown', onKeyPress);
 
@@ -50,7 +54,6 @@ function onGalleryClick(event) {
     }
   }
 }
-
 
 
 console.log(galleryItems);
