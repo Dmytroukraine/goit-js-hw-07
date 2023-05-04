@@ -1,40 +1,56 @@
 
-import { galleryItems } from './src/gallery-items.js';
-import 'basiclightbox/dist/basicLightbox.min.css';
-import * as basicLightbox from 'basiclightbox';
 
-const galleryContainer = document.querySelector('.gallery');
+import { galleryItems } from './gallery-items.js';
 
-const createGalleryMarkup = () => {
-  return galleryItems
-    .map(({ preview, original, description }) => {
-      return `
-      <div class="gallery__item">
+const galleryList = document.querySelector('.gallery');
+const createGalleryMarkup = galleryItems
+  .map(({ preview, original, description }) => {
+    return `
+      <li class="gallery__item">
         <a class="gallery__link" href="${original}">
-          <img class="gallery__image" src="${preview}" alt="${description}" />
+          <img
+            class="gallery__image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}"
+          />
         </a>
-      </div>
+      </li>
     `;
-    })
-    .join('');
-};
+  })
+  .join('');
 
-galleryContainer.innerHTML = createGalleryMarkup();
+galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup);
 
-galleryContainer.addEventListener('click', (event) => {
+galleryList.addEventListener('click', onGalleryClick);
+
+function onGalleryClick(event) {
   event.preventDefault();
 
-  if (event.target.nodeName !== 'IMG') {
+  const isImage = event.target.classList.contains('gallery__image');
+  if (!isImage) {
     return;
   }
 
-  const originalSrc = event.target.closest('.gallery__link').href;
+  const imageUrl = event.target.dataset.source;
 
   const instance = basicLightbox.create(`
-    <img src="${originalSrc}" width="800" height="600">
+  <img src="${imageUrl}" width="800" height="600">
 `);
 
+
   instance.show();
-});
+
+  document.addEventListener('keydown', onKeyPress);
+
+  function onKeyPress(event) {
+    if (event.code === 'Escape') {
+      instance.close();
+      document.removeEventListener('keydown', onKeyPress);
+    }
+  }
+}
+
+
 
 console.log(galleryItems);
