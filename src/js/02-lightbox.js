@@ -5,10 +5,10 @@ const createGalleryMarkup = galleryItems
   .map(({ preview, original, description }) => {
     return `
       <li class="gallery__item">
-        <a class="gallery__link" href="${original}">
+        <a class="gallery__link" href="${preview}">
           <img
             class="gallery__image"
-            src="${preview}"
+            src="${original}"
             alt="${description}"
           />
         </a>
@@ -37,19 +37,7 @@ function onGalleryClick(event) {
 
   instance.show();
 
-  const image = instance.element().querySelector('img');
-  image.onload = () => {
-    image.classList.add('opening');
-  };
-
-  document.addEventListener('keydown', onKeyPress);
-
-  function onKeyPress(event) {
-    if (event.code === 'Escape') {
-      instance.close();
-      document.removeEventListener('keydown', onKeyPress);
-    }
-  }
+  
 }
 
 
