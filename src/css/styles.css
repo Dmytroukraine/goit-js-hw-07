@@ -106,31 +106,3 @@
   animation: closing 1.2s ease-in-out forwards;
 }
 
-
-
-
-.gallery__item {
-  display: inline-block;
-  margin-bottom: 20px;
-}
-.gallery__image {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.caption {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  transition: opacity 0.25s ease-in-out;
-}
-.sl-show .caption {
-  display: block;
-}
