@@ -1,6 +1,5 @@
 
 import { galleryItems } from './gallery-items.js';
-
 const galleryList = document.querySelector('.gallery');
 const createGalleryMarkup = galleryItems
   .map(({ preview, original, description }) => {
@@ -10,7 +9,6 @@ const createGalleryMarkup = galleryItems
           <img
             class="gallery__image"
             src="${preview}"
-            data-source="${original}"
             alt="${description}"
           />
         </a>
@@ -31,7 +29,7 @@ function onGalleryClick(event) {
     return;
   }
 
-  const imageUrl = event.target.dataset.source;
+  const imageUrl = event.target.getAttribute('src');
 
   const instance = basicLightbox.create(`
     <img src="${imageUrl}" width="800" height="600">
@@ -53,6 +51,7 @@ function onGalleryClick(event) {
     }
   }
 }
+
 
 
 console.log(galleryItems);
