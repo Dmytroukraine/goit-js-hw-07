@@ -1,58 +1,40 @@
+import { galleryItems } from "./gallery-items.js";
 
-import { galleryItems } from './gallery-items.js';
+const galleryList = document.querySelector(".gallery");
 
-const galleryList = document.querySelector('.gallery');
-const createGalleryMarkup = galleryItems
-  .map(({ preview, original, description }) => {
-    return `
-      <li class="gallery__item">
-        <a class="gallery__link" href="${original}">
-          <img
-            class="gallery__image"
-            src="${preview}"
-            data-source="${original}"
-            alt="${description}"
-          />
-        </a>
-      </li>
-    `;
-  })
-  .join('');
 
-galleryList.insertAdjacentHTML('beforeend', createGalleryMarkup);
+const createGalleryItem = ({ preview, original, description }) => `
+  <li class="gallery__item">
+    <a class="gallery__link" href="${original}" data-original-img=${original}>
+      <img class="gallery__image" src="${preview}" alt="${description}" />
+    </a>
+  </li>
+`;
 
-galleryList.addEventListener('click', onGalleryClick);
+galleryList.innerHTML = galleryItems.map(createGalleryItem).join("");
 
-function onGalleryClick(event) {
+const instances = [];
+
+galleryList.addEventListener("click", (event) => {
   event.preventDefault();
-
-  const isImage = event.target.classList.contains('gallery__image');
-  if (!isImage) {
-    return;
-  }
-
-  const imageUrl = event.target.dataset.source;
-
+  const original = event.target
+    .closest(".gallery__link")
+    .getAttribute("data-original-img");
   const instance = basicLightbox.create(`
-    <img src="${imageUrl}" width="800" height="600">
-`);
-
+    <img src="${original}" width="800" height="600">
+  `);
+  instances.push(instance); // Add instance to array
   instance.show();
+  document.addEventListener("keydown", (event) => onEscPress(event, instance));
+});
 
-  const image = instance.element().querySelector('img');
-  image.onload = () => {
-    image.classList.add('opening');
-  };
-
-  document.addEventListener('keydown', onKeyPress);
-
-  function onKeyPress(event) {
-    if (event.code === 'Escape') {
-      instance.close();
-      document.removeEventListener('keydown', onKeyPress);
-    }
+const onEscPress = (event, instance) => {
+  const ESC_KEYCODE = "Escape";
+  if (event.code === ESC_KEYCODE) {
+    instance.close();
+    instances.splice(instances.indexOf(instance), 1); // Remove instance from array
+    document.removeEventListener("keydown", (event) =>
+      onEscPress(event, instance)
+    );
   }
-}
-
-
-console.log(galleryItems);
+};
