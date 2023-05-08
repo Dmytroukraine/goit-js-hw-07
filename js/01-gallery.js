@@ -20,10 +20,11 @@ galleryList.addEventListener("click", (event) => {
   const original = event.target
     .closest(".gallery__link")
     .getAttribute("data-original-img");
+    
   const instance = basicLightbox.create(`
     <img src="${original}" width="800" height="600">
   `);
-  instances.push(instance); // Add instance to array
+  instances.push(instance); 
   instance.show();
   document.addEventListener("keydown", (event) => onEscPress(event, instance));
 });
@@ -32,7 +33,7 @@ const onEscPress = (event, instance) => {
   const ESC_KEYCODE = "Escape";
   if (event.code === ESC_KEYCODE) {
     instance.close();
-    instances.splice(instances.indexOf(instance), 1); // Remove instance from array
+    instances.splice(instances.indexOf(instance), 1); 
     document.removeEventListener("keydown", (event) =>
       onEscPress(event, instance)
     );
